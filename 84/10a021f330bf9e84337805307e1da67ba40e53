@@ -1,0 +1,20 @@
+README.md
+  h_267f51d775769b 87,102-103
+src/App.tsx
+  h_267f51d775769b 34,386,1230-1232,1239,1247-1261
+src/Journey.tsx
+  h_267f51d775769b 43,51,196-212
+src/redesign.css
+  h_267f51d775769b 2106-2197
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8410a021f330bf9e84337805307e1da67ba40e53",
+  "prompts": {},
+  "humans": {
+    "h_267f51d775769b": {
+      "author": "revoluxe-ai <revoluxe@gmail.com>"
+    }
+  }
+}
