@@ -2195,3 +2195,40 @@ main h1:focus {
 @media (prefers-reduced-motion: reduce) {
   .mobile-app-banner { transition: none; }
 }
+.demo-modal .photo-demo.mozzarella-demo {
+  display: block;
+  padding: 0;
+  margin: 20px 0 16px;
+  overflow: hidden;
+  background: #faf8f2;
+  border: 1px solid #e8e5dc;
+  border-radius: 10px;
+}
+.mozzarella-demo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2.15;
+  object-fit: cover;
+  object-position: center 58%;
+}
+.demo-modal .mozzarella-demo .demo-image-caption {
+  display: block;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #687186;
+  text-align: center;
+}
+.results-page .sort-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #536078;
+  font-size: 13px;
+}
+@media (max-width: 640px) {
+  .results-page .sort-label { justify-content: space-between; }
+  .results-page .sort-label select { flex: 1; min-width: 0; }
+}

@@ -128,7 +128,6 @@ export default function App() {
   const [request, setRequest] = useState<Request>({ ...initialRequest });
   const [source, setSource] = useState<InputSource>("text");
   const [busy, setBusy] = useState(false);
-  const [catalogOpen, setCatalogOpen] = useState(false);
   const [error, setError] = useState("");
   const [demo, setDemo] = useState<DemoMode>(null);
   const [selected, setSelected] = useState<string[]>([]);
@@ -290,7 +289,6 @@ export default function App() {
       requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
     );
     setRequest({ ...draft, category });
-    setCatalogOpen(false);
     setBusy(false);
     setSelected([]);
     setChosen(null);
@@ -488,348 +486,336 @@ export default function App() {
           />
           <div className="catalog-heading">
             <div>
-              <h2>Все предложения и детали</h2>
+              <h2>Все доступные предложения</h2>
               <p>
                 {ranked.length} предложений · {suitable.length} полностью
                 соответствуют запросу
               </p>
             </div>
-            <button
-              className="btn secondary"
-              aria-expanded={catalogOpen}
-              onClick={() => setCatalogOpen(!catalogOpen)}
-            >
-              {catalogOpen
-                ? "Свернуть каталог"
-                : `Посмотреть все ${ranked.length}`}
-              <Icon name="down" size={17} />
-            </button>
           </div>
-          {catalogOpen && (
-            <div className="results-layout">
-              <aside
-                className={`filters ${mobileFilters ? "mobile-filters-open" : ""}`}
+          <div className="results-layout">
+            <aside
+              className={`filters ${mobileFilters ? "mobile-filters-open" : ""}`}
+            >
+              <button
+                className="mobile-filter-toggle text-button"
+                onClick={() => setMobileFilters(!mobileFilters)}
+                aria-expanded={mobileFilters}
               >
-                <button
-                  className="mobile-filter-toggle text-button"
-                  onClick={() => setMobileFilters(!mobileFilters)}
-                  aria-expanded={mobileFilters}
-                >
-                  <Icon name="sliders" size={15} />
-                  Фильтры{docsOnly || origin !== "all" ? " · включены" : ""}
-                  <Icon name="down" size={14} />
-                </button>
-                <div className="filter-section">
-                  <div className="filter-title">Что важнее?</div>
-                  <div className="priority-vertical">
-                    {priorityOptions.map((p) => (
-                      <button
-                        key={p.id}
-                        className={request.priority === p.id ? "selected" : ""}
-                        onClick={() => changePriority(p.id)}
-                      >
-                        <Icon name={p.icon} size={18} />
-                        <span>{p.title}</span>
-                        <span className="radio-dot" />
-                      </button>
+                <Icon name="sliders" size={15} />
+                Фильтры{docsOnly || origin !== "all" ? " · включены" : ""}
+                <Icon name="down" size={14} />
+              </button>
+              <div className="filter-section">
+                <div className="filter-title">Что важнее?</div>
+                <div className="priority-vertical">
+                  {priorityOptions.map((p) => (
+                    <button
+                      key={p.id}
+                      className={request.priority === p.id ? "selected" : ""}
+                      onClick={() => changePriority(p.id)}
+                    >
+                      <Icon name={p.icon} size={18} />
+                      <span>{p.title}</span>
+                      <span className="radio-dot" />
+                    </button>
+                  ))}
+                </div>
+                <p className="filter-explain">
+                  {request.priority === "balance"
+                    ? "Учитываем стоимость и скорость доставки."
+                    : request.priority === "price"
+                      ? "Сначала подходящие варианты с меньшей общей стоимостью."
+                      : "Сначала подходящие варианты с коротким сроком доставки."}
+                </p>
+              </div>
+              <div className="filter-section">
+                <div className="filter-title">Уточнить подбор</div>
+                <label className="check-label">
+                  <input
+                    type="checkbox"
+                    checked={docsOnly}
+                    onChange={(e) => setDocsOnly(e.target.checked)}
+                  />
+                  <span>
+                    Есть сведения
+                    <br />о документах
+                  </span>
+                </label>
+                <label className="field origin-field">
+                  <span>Город поставщика</span>
+                  <select
+                    value={origin}
+                    onChange={(e) => setOrigin(e.target.value)}
+                  >
+                    <option value="all">Все города</option>
+                    {cities.map((c) => (
+                      <option key={c}>{c}</option>
                     ))}
-                  </div>
-                  <p className="filter-explain">
-                    {request.priority === "balance"
-                      ? "Учитываем стоимость и скорость доставки."
-                      : request.priority === "price"
-                        ? "Сначала подходящие варианты с меньшей общей стоимостью."
-                        : "Сначала подходящие варианты с коротким сроком доставки."}
-                  </p>
-                </div>
-                <div className="filter-section">
-                  <div className="filter-title">Уточнить подбор</div>
-                  <label className="check-label">
-                    <input
-                      type="checkbox"
-                      checked={docsOnly}
-                      onChange={(e) => setDocsOnly(e.target.checked)}
-                    />
-                    <span>
-                      Есть сведения
-                      <br />о документах
-                    </span>
-                  </label>
-                  <label className="field origin-field">
-                    <span>Город поставщика</span>
-                    <select
-                      value={origin}
-                      onChange={(e) => setOrigin(e.target.value)}
-                    >
-                      <option value="all">Все города</option>
-                      {cities.map((c) => (
-                        <option key={c}>{c}</option>
-                      ))}
-                    </select>
-                  </label>
-                  {(docsOnly || origin !== "all") && (
-                    <button
-                      className="text-button reset-filter"
-                      onClick={() => {
-                        setDocsOnly(false);
-                        setOrigin("all");
-                      }}
-                    >
-                      Сбросить фильтры
-                    </button>
-                  )}
-                </div>
-                <div className="sidebar-tip">
-                  <Icon name="scale" size={22} />
-                  <strong>Смотрите шире цены</strong>
-                  <p>
-                    Дешевле за килограмм — не всегда дешевле за закупку.
-                    Добавьте 2–3 варианта к сравнению.
-                  </p>
-                </div>
-              </aside>
-              <section
-                className="offer-list"
-                aria-label="Предложения поставщиков"
-              >
-                <div className="results-toolbar">
-                  <div className="result-tabs">
-                    <button
-                      className={filter === "all" ? "active" : ""}
-                      onClick={() => setFilter("all")}
-                    >
-                      Все предложения <span>{ranked.length}</span>
-                    </button>
-                    <button
-                      className={filter === "suitable" ? "active" : ""}
-                      onClick={() => setFilter("suitable")}
-                    >
-                      Подходят <span>{suitable.length}</span>
-                    </button>
-                  </div>
-                  <label className="sort-label">
-                    <span className="sr-only">Сортировка</span>
-                    <select
-                      aria-label="Сортировка"
-                      value={sort}
-                      onChange={(e) => setSort(e.target.value)}
-                    >
-                      <option value="recommended">По соответствию</option>
-                      <option value="total">По общей стоимости</option>
-                      <option value="delivery">По сроку доставки</option>
-                      <option value="unit">По цене за единицу</option>
-                    </select>
-                  </label>
-                </div>
-                {suitable.length === 0 && (
-                  <div className="no-match">
-                    <Icon name="info" size={20} />
-                    <div>
-                      <strong>Точного совпадения пока нет</strong>
-                      <p>
-                        Ниже — варианты с отличиями. Измените срок, объём или
-                        оплату, чтобы расширить подбор.
-                      </p>
-                    </div>
-                  </div>
+                  </select>
+                </label>
+                {(docsOnly || origin !== "all") && (
+                  <button
+                    className="text-button reset-filter"
+                    onClick={() => {
+                      setDocsOnly(false);
+                      setOrigin("all");
+                    }}
+                  >
+                    Сбросить фильтры
+                  </button>
                 )}
-                <div className="offer-count" aria-live="polite">
-                  Показано {visible.length} из {ranked.length} · Стоимость
-                  рассчитана с доставкой
+              </div>
+              <div className="sidebar-tip">
+                <Icon name="scale" size={22} />
+                <strong>Смотрите шире цены</strong>
+                <p>
+                  Дешевле за килограмм — не всегда дешевле за закупку.
+                  Добавьте 2–3 варианта к сравнению.
+                </p>
+              </div>
+            </aside>
+            <section
+              className="offer-list"
+              aria-label="Предложения поставщиков"
+            >
+              <div className="results-toolbar">
+                <div className="result-tabs">
+                  <button
+                    className={filter === "all" ? "active" : ""}
+                    onClick={() => setFilter("all")}
+                  >
+                    Все предложения <span>{ranked.length}</span>
+                  </button>
+                  <button
+                    className={filter === "suitable" ? "active" : ""}
+                    onClick={() => setFilter("suitable")}
+                  >
+                    Подходят <span>{suitable.length}</span>
+                  </button>
                 </div>
-                {visible.map((o) => {
-                  const s = o.supplier,
-                    b = badge(o),
-                    isSelected = selected.includes(s.id);
-                  return (
-                    <article
-                      key={s.id}
-                      className={`offer-card ${s.id === recommended?.supplier.id ? "recommended" : ""} ${isSelected ? "is-selected" : ""}`}
-                    >
-                      {b && (
-                        <div className={`offer-ribbon ${b.className}`}>
-                          <Icon name={b.icon} size={15} />
-                          {b.text}
-                          {s.id === recommended?.supplier.id && (
-                            <span>по вашим условиям</span>
-                          )}
-                        </div>
-                      )}
-                      <div className="offer-main">
-                        <div className="offer-top">
-                          <div className="supplier-identity">
-                            <Avatar s={s} />
-                            <div>
-                              <button
-                                className="supplier-name"
-                                onClick={() => setDrawer(s)}
-                              >
-                                {s.name}
-                                <Icon name="arrow" size={15} />
-                              </button>
-                              <div className="supplier-location">
-                                <Icon name="pin" size={13} />
-                                {s.city}
-                                <span>·</span>
-                                {o.distance
-                                  ? `${number(o.distance)} км`
-                                  : "в вашем городе"}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="unit-price">
-                            <strong>{money(s.price)}</strong>
-                            <span>/ {request.unit}</span>
-                          </div>
-                        </div>
-                        <div className="product-title">
-                          {s.product}
-                          <span className="product-specs">
-                            {" · "}
-                            {s.specs}
-                          </span>
-                        </div>
-                        <div className="offer-facts">
-                          <div>
-                            <span>
-                              <Icon name="box" size={14} />
-                              Минимальная партия
-                            </span>
-                            <strong>
-                              {number(s.min)} {request.unit}
-                            </strong>
-                          </div>
-                          <div>
-                            <span>
-                              <Icon name="truck" size={15} />
-                              Доставка
-                            </span>
-                            <strong
-                              className={
-                                o.days > request.days ? "warning-text" : ""
-                              }
-                            >
-                              {dayLabel(o.days)}
-                            </strong>
-                          </div>
-                          <div>
-                            <span>
-                              <Icon name="wallet" size={14} />
-                              Оплата
-                            </span>
-                            <strong
-                              className={!o.paymentOk ? "warning-text" : ""}
-                            >
-                              {o.paymentOk && request.payment !== "any"
-                                ? paymentLabels[request.payment]
-                                : paymentLabels[
-                                    s.payments.includes("defer30")
-                                      ? "defer30"
-                                      : s.payments.includes("defer14")
-                                        ? "defer14"
-                                        : s.payments[0]
-                                  ]}
-                            </strong>
-                          </div>
-                        </div>
-                        <div
-                          className={`match-reason ${o.suitable ? "fits" : "doesnt-fit"}`}
-                        >
-                          <Icon
-                            name={o.suitable ? "check" : "info"}
-                            size={16}
-                          />
-                          <span>
-                            {o.suitable
-                              ? "Подходит по объёму, сроку и оплате"
-                              : `Не соответствует условиям: ${o.issues.join(" · ")}`}
-                          </span>
-                        </div>
-                        <div className="cost-breakdown">
-                          <div>
-                            <span>
-                              Товар · {number(o.quantity)} {request.unit}
-                              {o.quantity > request.quantity
-                                ? " (мин. партия)"
-                                : ""}
-                            </span>
-                            <strong>{money(o.goods)}</strong>
-                          </div>
-                          <span className="math-symbol">+</span>
-                          <div>
-                            <span>Доставка</span>
-                            <strong>{money(o.shipping)}</strong>
-                          </div>
-                          <span className="math-symbol">=</span>
-                          <div className="total-cost">
-                            <span>Итого с доставкой</span>
-                            <strong>{money(o.total)}</strong>
-                          </div>
-                        </div>
-                        <div className="offer-actions">
-                          <span
-                            className={`document-status ${!s.docs ? "unconfirmed" : ""}`}
-                          >
-                            <Icon name={s.docs ? "shield" : "info"} size={15} />
-                            {s.docs
-                              ? "Документы указаны"
-                              : "Документы не указаны"}
-                          </span>
+                <label className="sort-label">
+                  <span>Сортировка</span>
+                  <select
+                    aria-label="Сортировка"
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value)}
+                  >
+                    <option value="recommended">По соответствию</option>
+                    <option value="total">По общей стоимости</option>
+                    <option value="delivery">По сроку доставки</option>
+                    <option value="unit">По цене за единицу</option>
+                  </select>
+                </label>
+              </div>
+              {suitable.length === 0 && (
+                <div className="no-match">
+                  <Icon name="info" size={20} />
+                  <div>
+                    <strong>Точного совпадения пока нет</strong>
+                    <p>
+                      Ниже — варианты с отличиями. Измените срок, объём или
+                      оплату, чтобы расширить подбор.
+                    </p>
+                  </div>
+                </div>
+              )}
+              <div className="offer-count" aria-live="polite">
+                Показано {visible.length} из {ranked.length} · Стоимость
+                рассчитана с доставкой
+              </div>
+              {visible.map((o) => {
+                const s = o.supplier,
+                  b = badge(o),
+                  isSelected = selected.includes(s.id);
+                return (
+                  <article
+                    key={s.id}
+                    className={`offer-card ${s.id === recommended?.supplier.id ? "recommended" : ""} ${isSelected ? "is-selected" : ""}`}
+                  >
+                    {b && (
+                      <div className={`offer-ribbon ${b.className}`}>
+                        <Icon name={b.icon} size={15} />
+                        {b.text}
+                        {s.id === recommended?.supplier.id && (
+                          <span>по вашим условиям</span>
+                        )}
+                      </div>
+                    )}
+                    <div className="offer-main">
+                      <div className="offer-top">
+                        <div className="supplier-identity">
+                          <Avatar s={s} />
                           <div>
                             <button
-                              className="text-button details-btn"
+                              className="supplier-name"
                               onClick={() => setDrawer(s)}
                             >
-                              Подробнее
+                              {s.name}
                               <Icon name="arrow" size={15} />
                             </button>
-                            <button
-                              className={`compare-button ${isSelected ? "checked" : ""}`}
-                              onClick={() => toggle(s.id)}
-                              aria-pressed={isSelected}
-                            >
-                              <Icon
-                                name={isSelected ? "check" : "scale"}
-                                size={17}
-                              />
-                              {isSelected ? "В сравнении" : "Сравнить"}
-                            </button>
+                            <div className="supplier-location">
+                              <Icon name="pin" size={13} />
+                              {s.city}
+                              <span>·</span>
+                              {o.distance
+                                ? `${number(o.distance)} км`
+                                : "в вашем городе"}
+                            </div>
                           </div>
                         </div>
+                        <div className="unit-price">
+                          <strong>{money(s.price)}</strong>
+                          <span>/ {request.unit}</span>
+                        </div>
                       </div>
-                    </article>
-                  );
-                })}
-                {visible.length === 0 && (
-                  <div className="empty-state">
-                    <span className="empty-icon">
-                      <Icon name="search" size={30} />
-                    </span>
-                    <h2>Здесь пока пусто</h2>
-                    <p>
-                      Для этих фильтров нет предложений.
-                      <br />
-                      Попробуйте показать все варианты.
-                    </p>
-                    <button
-                      className="btn secondary"
-                      onClick={() => {
-                        setFilter("all");
-                        setDocsOnly(false);
-                        setOrigin("all");
-                      }}
-                    >
-                      Сбросить все фильтры
-                    </button>
-                  </div>
-                )}
-                <DemoNote>
-                  Все данные синтетические. Расстояния ориентировочные; сроки и
-                  доставка заданы для демонстрации.
-                </DemoNote>
-              </section>
-            </div>
-          )}
+                      <div className="product-title">
+                        {s.product}
+                        <span className="product-specs">
+                          {" · "}
+                          {s.specs}
+                        </span>
+                      </div>
+                      <div className="offer-facts">
+                        <div>
+                          <span>
+                            <Icon name="box" size={14} />
+                            Минимальная партия
+                          </span>
+                          <strong>
+                            {number(s.min)} {request.unit}
+                          </strong>
+                        </div>
+                        <div>
+                          <span>
+                            <Icon name="truck" size={15} />
+                            Доставка
+                          </span>
+                          <strong
+                            className={
+                              o.days > request.days ? "warning-text" : ""
+                            }
+                          >
+                            {dayLabel(o.days)}
+                          </strong>
+                        </div>
+                        <div>
+                          <span>
+                            <Icon name="wallet" size={14} />
+                            Оплата
+                          </span>
+                          <strong
+                            className={!o.paymentOk ? "warning-text" : ""}
+                          >
+                            {o.paymentOk && request.payment !== "any"
+                              ? paymentLabels[request.payment]
+                              : paymentLabels[
+                                  s.payments.includes("defer30")
+                                    ? "defer30"
+                                    : s.payments.includes("defer14")
+                                      ? "defer14"
+                                      : s.payments[0]
+                                ]}
+                          </strong>
+                        </div>
+                      </div>
+                      <div
+                        className={`match-reason ${o.suitable ? "fits" : "doesnt-fit"}`}
+                      >
+                        <Icon
+                          name={o.suitable ? "check" : "info"}
+                          size={16}
+                        />
+                        <span>
+                          {o.suitable
+                            ? "Подходит по объёму, сроку и оплате"
+                            : `Не соответствует условиям: ${o.issues.join(" · ")}`}
+                        </span>
+                      </div>
+                      <div className="cost-breakdown">
+                        <div>
+                          <span>
+                            Товар · {number(o.quantity)} {request.unit}
+                            {o.quantity > request.quantity
+                              ? " (мин. партия)"
+                              : ""}
+                          </span>
+                          <strong>{money(o.goods)}</strong>
+                        </div>
+                        <span className="math-symbol">+</span>
+                        <div>
+                          <span>Доставка</span>
+                          <strong>{money(o.shipping)}</strong>
+                        </div>
+                        <span className="math-symbol">=</span>
+                        <div className="total-cost">
+                          <span>Итого с доставкой</span>
+                          <strong>{money(o.total)}</strong>
+                        </div>
+                      </div>
+                      <div className="offer-actions">
+                        <span
+                          className={`document-status ${!s.docs ? "unconfirmed" : ""}`}
+                        >
+                          <Icon name={s.docs ? "shield" : "info"} size={15} />
+                          {s.docs
+                            ? "Документы указаны"
+                            : "Документы не указаны"}
+                        </span>
+                        <div>
+                          <button
+                            className="text-button details-btn"
+                            onClick={() => setDrawer(s)}
+                          >
+                            Подробнее
+                            <Icon name="arrow" size={15} />
+                          </button>
+                          <button
+                            className={`compare-button ${isSelected ? "checked" : ""}`}
+                            onClick={() => toggle(s.id)}
+                            aria-pressed={isSelected}
+                          >
+                            <Icon
+                              name={isSelected ? "check" : "scale"}
+                              size={17}
+                            />
+                            {isSelected ? "В сравнении" : "Сравнить"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+              {visible.length === 0 && (
+                <div className="empty-state">
+                  <span className="empty-icon">
+                    <Icon name="search" size={30} />
+                  </span>
+                  <h2>Здесь пока пусто</h2>
+                  <p>
+                    Для этих фильтров нет предложений.
+                    <br />
+                    Попробуйте показать все варианты.
+                  </p>
+                  <button
+                    className="btn secondary"
+                    onClick={() => {
+                      setFilter("all");
+                      setDocsOnly(false);
+                      setOrigin("all");
+                    }}
+                  >
+                    Сбросить все фильтры
+                  </button>
+                </div>
+              )}
+              <DemoNote>
+                Все данные синтетические. Расстояния ориентировочные; сроки и
+                доставка заданы для демонстрации.
+              </DemoNote>
+            </section>
+          </div>
         </main>
       )}
 
@@ -1304,16 +1290,18 @@ export default function App() {
                     : "В полноценном продукте здесь можно будет записать голос. Сейчас покажем заранее подготовленный пример."}
                 </p>
                 {demo === "photo" ? (
-                  <div className="photo-demo">
-                    <div className="cheese-package">
-                      <Icon name="cheese" size={56} />
-                      <span>MOZZARELLA</span>
-                      <small>ДЛЯ ПИЦЦЫ · 45% · 2 КГ</small>
-                    </div>
-                    <span className="demo-image-caption">
-                      Иллюстрация демотовара
-                    </span>
-                  </div>
+                  <figure className="photo-demo mozzarella-demo">
+                    <img
+                      src="/images/mozzarella-demo.webp"
+                      width={1536}
+                      height={1024}
+                      alt="Сливочная моцарелла для пиццы: свежий срез, ломтики и листья базилика"
+                      decoding="async"
+                    />
+                    <figcaption className="demo-image-caption">
+                      Демофото · изображение создано с помощью ИИ
+                    </figcaption>
+                  </figure>
                 ) : (
                   <div className="voice-demo">
                     <span className="voice-icon">
