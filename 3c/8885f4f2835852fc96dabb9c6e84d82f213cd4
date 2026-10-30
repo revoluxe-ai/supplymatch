@@ -1,0 +1,29 @@
+index.html
+  s_9a59175b385d07::t_32e3011a21c191 1-18
+package.json
+  s_9a59175b385d07::t_73f1746eeb473b 1-23
+public/fonts/OFL.txt
+  s_9a59175b385d07::t_cafc06590c5c0d 1-93
+src/icons.tsx
+  s_9a59175b385d07::t_0ccd574c49d7a5 1-164
+tsconfig.json
+  s_9a59175b385d07::t_fda4b4b179ba67 1-21
+vite.config.ts
+  s_9a59175b385d07::t_53aa022c492a57 1-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3c8885f4f2835852fc96dabb9c6e84d82f213cd4",
+  "prompts": {},
+  "sessions": {
+    "s_9a59175b385d07": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b565bf25-1497-4cd7-92a4-8be5b3fc4686",
+        "model": "composer-2.5"
+      },
+      "human_author": "revoluxe-ai <revoluxe@gmail.com>"
+    }
+  }
+}
