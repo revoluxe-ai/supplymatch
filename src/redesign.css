@@ -2076,3 +2076,30 @@ main h1:focus {
     animation: none;
   }
 }
+
+/* Keep the decision-critical captions readable at normal browser zoom. */
+.recommendation-supplier small,
+.recommendation-total > span,
+.recommendation-total > small,
+.mini-breakdown > span,
+.recommendation-payment,
+.recommendation-docs,
+.recommendation-explanation > strong {
+  font-size: 12px;
+}
+.recommendation-supplier small,
+.recommendation-total > span,
+.recommendation-total > small,
+.mini-breakdown > span {
+  color: #596b85;
+}
+.mini-breakdown strong {
+  font-size: 14px;
+}
+.recommendation-explanation p {
+  font-size: 12px;
+  color: #596d87;
+}
+.recommendation-explanation.has-issues p {
+  color: #82682f;
+}
