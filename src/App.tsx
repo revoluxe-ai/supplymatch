@@ -31,7 +31,7 @@ import {
 import type { InputSource } from "./Journey";
 
 type Page = "search" | "interpret" | "results" | "compare";
-type DemoMode = "photo" | "voice" | "about" | null;
+type DemoMode = "photo" | "voice" | "about" | "mobile" | null;
 const priorityOptions: { id: Priority; title: string; icon: string }[] = [
   { id: "balance", title: "Баланс", icon: "scale" },
   { id: "price", title: "Дешевле", icon: "wallet" },
@@ -383,6 +383,7 @@ export default function App() {
           onSubmit={startInterpretation}
           onMedia={setDemo}
           onScenario={scenario}
+          onMobileApp={() => setDemo("mobile")}
           error={error}
         />
       )}
@@ -1226,14 +1227,16 @@ export default function App() {
         <Modal
           onClose={() => setDemo(null)}
           label={
-            demo === "about"
+            demo === "mobile"
+              ? "Концепт мобильного SupplyMatch"
+              : demo === "about"
               ? "О прототипе"
               : demo === "photo"
                 ? "Поиск по фото — демо"
                 : "Голосовой поиск — демо"
           }
         >
-          <div className="demo-modal">
+          <div className={`demo-modal${demo === "mobile" ? " mobile-concept-modal" : ""}`}>
             <button
               className="icon-btn modal-close"
               onClick={() => setDemo(null)}
@@ -1241,7 +1244,21 @@ export default function App() {
             >
               <Icon name="close" />
             </button>
-            {demo === "about" ? (
+            {demo === "mobile" ? (
+              <>
+                <span className="demo-modal-icon"><Icon name="search" size={30} /></span>
+                <div className="eyebrow">КОНЦЕПЦИЯ МОБИЛЬНОГО ПРИЛОЖЕНИЯ</div>
+                <h2>Поиск поставщиков.<br />Там, где вы работаете.</h2>
+                <p>Это демонстрационная версия SupplyMatch. Баннер показывает, как концепцию можно развить в мобильное приложение для поиска по фото, голосом и текстом.</p>
+                <div className="mobile-concept-benefits">
+                  <div><Icon name="camera" size={21} /><p><strong>Показать товар</strong><span>Сфотографировать упаковку или этикетку прямо на складе.</span></p></div>
+                  <div><Icon name="mic" size={21} /><p><strong>Описать потребность голосом</strong><span>Продиктовать товар, объём и условия, когда руки заняты.</span></p></div>
+                  <div><Icon name="scale" size={21} /><p><strong>Сравнить и выбрать</strong><span>Оценить полную стоимость, доставку и оплату в одном месте.</span></p></div>
+                </div>
+                <div className="about-limitations"><Icon name="info" size={19} /><p>Мобильное приложение ещё не разработано, скачивание недоступно. Распознавание фото и речи потребуется реализовать отдельно. В текущем прототипе работают только подготовленные демосценарии.</p></div>
+                <button className="btn primary full-width" onClick={() => setDemo(null)}>Вернуться к поиску<Icon name="arrow" size={18} /></button>
+              </>
+            ) : demo === "about" ? (
               <>
                 <span className="demo-modal-icon">
                   <Icon name="box" size={30} />

@@ -2103,3 +2103,95 @@ main h1:focus {
 .recommendation-explanation.has-issues p {
   color: #82682f;
 }
+.mobile-app-promo {
+  margin: 40px 0 0;
+}
+.mobile-app-banner {
+  display: block;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #dee1ef;
+  border-radius: 18px;
+  background: #fff;
+  color: #24314c;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.mobile-app-banner:hover {
+  border-color: #858af5;
+  box-shadow: 0 8px 28px #2932580d;
+}
+.mobile-app-banner:focus-visible {
+  outline: 3px solid #4e55f5;
+  outline-offset: 5px;
+}
+.mobile-app-banner picture, .mobile-app-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mobile-app-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-top: 1px solid #e8eaf3;
+  font-size: 14px;
+  font-weight: 500;
+}
+.mobile-app-caption > span, .mobile-app-caption > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.mobile-app-caption > span:last-child {
+  color: #484ed9;
+}
+.mobile-app-concept {
+  padding: 3px 7px;
+  background: #f0f1fb;
+  border-radius: 5px;
+  color: #505b75;
+  font-size: 12px;
+}
+.mobile-concept-benefits {
+  display: grid;
+  gap: 18px;
+  margin: 24px 0;
+}
+.mobile-concept-benefits > div {
+  display: flex;
+  gap: 14px;
+}
+.mobile-concept-benefits svg {
+  flex-shrink: 0;
+  color: #4e55f5;
+  margin-top: 3px;
+}
+.mobile-concept-benefits p {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 14px;
+  color: #536078;
+}
+.mobile-concept-benefits strong {
+  color: #1d2942;
+  font-size: 15px;
+}
+.mobile-concept-modal .eyebrow { font-size: 11px; line-height: 1.5; }
+.mobile-concept-modal .about-limitations p { font-size: 13px; line-height: 1.6; color: #625b47; }
+@media (max-width: 640px) {
+  .mobile-app-promo { margin-top: 30px; }
+  .mobile-app-banner { border-radius: 12px; }
+  .mobile-app-caption { padding: 13px 14px; gap: 10px; }
+  .mobile-app-caption > span:first-child { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .mobile-app-caption > span:last-child { flex-shrink: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-app-banner { transition: none; }
+}

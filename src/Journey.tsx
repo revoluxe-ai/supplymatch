@@ -40,6 +40,7 @@ export function SearchLanding({
   onSubmit,
   onMedia,
   onScenario,
+  onMobileApp,
   error,
 }: {
   query: string;
@@ -47,6 +48,7 @@ export function SearchLanding({
   onSubmit: (e: FormEvent) => void;
   onMedia: (s: "photo" | "voice") => void;
   onScenario: (c: Category) => void;
+  onMobileApp: () => void;
   error: string;
 }) {
   return (
@@ -190,6 +192,23 @@ export function SearchLanding({
             </button>
           ))}
         </div>
+      </section>
+      <section className="mobile-app-promo" aria-label="Концепт мобильного SupplyMatch">
+        <button
+          className="mobile-app-banner"
+          onClick={onMobileApp}
+          aria-label="Мобильный SupplyMatch: поиск по фото, голосом и текстом. Подробнее о концепции приложения"
+          aria-haspopup="dialog"
+        >
+          <picture>
+            <source media="(min-width: 641px)" srcSet="/images/supplymatch-app-wide.webp" width={2172} height={724} />
+            <img src="/images/supplymatch-app-mobile.webp" width={1672} height={941} alt="" loading="lazy" decoding="async" />
+          </picture>
+          <span className="mobile-app-caption">
+            <span>Мобильный SupplyMatch <span className="mobile-app-concept">Концепт</span></span>
+            <span>Подробнее <Icon name="arrow" size={16} /></span>
+          </span>
+        </button>
       </section>
       <footer className="discovery-footer">
         <span>SupplyMatch · UX-прототип для Goulash.Tech</span>
