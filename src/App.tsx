@@ -1292,7 +1292,7 @@ export default function App() {
                 {demo === "photo" ? (
                   <figure className="photo-demo mozzarella-demo">
                     <img
-                      src="/images/mozzarella-demo.webp"
+                      src={`${import.meta.env.BASE_URL}images/mozzarella-demo.webp`}
                       width={1536}
                       height={1024}
                       alt="Сливочная моцарелла для пиццы: свежий срез, ломтики и листья базилика"

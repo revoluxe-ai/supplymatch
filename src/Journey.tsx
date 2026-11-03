@@ -201,8 +201,8 @@ export function SearchLanding({
           aria-haspopup="dialog"
         >
           <picture>
-            <source media="(min-width: 641px)" srcSet="/images/supplymatch-app-wide.webp" width={2172} height={724} />
-            <img src="/images/supplymatch-app-mobile.webp" width={1672} height={941} alt="" loading="lazy" decoding="async" />
+            <source media="(min-width: 641px)" srcSet={`${import.meta.env.BASE_URL}images/supplymatch-app-wide.webp`} width={2172} height={724} />
+            <img src={`${import.meta.env.BASE_URL}images/supplymatch-app-mobile.webp`} width={1672} height={941} alt="" loading="lazy" decoding="async" />
           </picture>
           <span className="mobile-app-caption">
             <span>Мобильный SupplyMatch <span className="mobile-app-concept">Концепт</span></span>
